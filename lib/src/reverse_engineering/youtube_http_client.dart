@@ -23,14 +23,15 @@ class YoutubeHttpClient extends http.BaseClient {
 
   bool get closed => _closed;
 
-  static const Map<String, String> defaultHeaders = {
-    'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.18 Safari/537.36',
-    'cookie': 'CONSENT=YES+cb',
-    'accept':
-        'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'accept-language': 'en-US,en;q=0.5',
-  };
+ static const Map<String, String> defaultHeaders = {
+  'user-agent': 'com.google.ios.youtube/20.10.4 (iPhone16,2; U; CPU iOS 18_3_2 like Mac OS X;)',
+  'cookie': 'LOGIN_INFO=AFmmF2swRQIgKGP9Qc4c_JSBr3JDW03IIK_lb6FimOyIYtxUJmKYIgECIQCQYge5iBtxNg_YJlJ5kcEGUGjgVh-KKtfnlZXAcBOQZg:QUQ3MjNmeEktdWJSdFlZV2hTUEdQOG9iSENZZ3hPXy14MUNHaDF2c1NRc1JDSy1Kd2FGZVZ2MTVqZjdDaFg4TExjc2pGSjJDUkdkRk1NU2FWR1RyUUNOVUFsaEtRcGFDcHdmeE5iQV8zSl9wcTI5eFJQczNhQzlLMklGX05BR3UzWXNmUnU3TnNCTGN5N1Y0Q09yX2lYM2tRZWhHYjZlb0lR; VISITOR_INFO1_LIVE=b9gKi5jBfiU; VISITOR_PRIVACY_METADATA=CgJQSxIEGgAgOQ%3D%3D; SID=g.a000xQiM13KDXa44t7rv7KDxcyAQIaEzLEf1Z5iXyXaWPa_E0KfqPBpF20mfLremKLHl_p_7QgACgYKAacSARQSFQHGX2MibZ2Q3ycMyKOrIlQ8QZviBRoVAUF8yKrhSBA_c0zGilB-SFuriPQD0076; __Secure-1PSID=g.a000xQiM13KDXa44t7rv7KDxcyAQIaEzLEf1Z5iXyXaWPa_E0KfqSlt1J3DvzfI7FCmQxosctwACgYKAbsSARQSFQHGX2MiuQt5RUgBosblK-W-kzR3XRoVAUF8yKp_gLIMT60q_hQk05c4IF0a0076; __Secure-3PSID=g.a000xQiM13KDXa44t7rv7KDxcyAQIaEzLEf1Z5iXyXaWPa_E0KfqJbOnrZibqKc10znchZTmBAACgYKAcgSARQSFQHGX2MiFZIkDt6-Q3FKGnvCzheB7RoVAUF8yKprPeqXHK6kLjjajL8buhX30076; HSID=AQRM7kfT0klVdejUu; SSID=AyrtsnJlL5VtpEQw8; APISID=eWBITK-BqGLFzwt8/Ak1utx1_IzgdAg8wN; SAPISID=C85_wOpQCTSSG8Fm/AW-I46I53dShBh9vH; __Secure-1PAPISID=C85_wOpQCTSSG8Fm/AW-I46I53dShBh9vH; __Secure-3PAPISID=C85_wOpQCTSSG8Fm/AW-I46I53dShBh9vH; YSC=ffi8T050DMc; __Secure-ROLLOUT_TOKEN=CMeO85Oy8bLb4gEQ39PQrofFjAMY4aC6h7H6jQM%3D; PREF=f6=40000000&tz=Asia.Karachi&f5=30000&f7=100&f4=4000000; __Secure-1PSIDTS=sidts-CjEB5H03P6tAz7tnCKaFBNVgABwfhuZySYyhZXBEO0Cf7nXGbbAuRule_eiOfz4b9Qx3EAA; __Secure-3PSIDTS=sidts-CjEB5H03P6tAz7tnCKaFBNVgABwfhuZySYyhZXBEO0Cf7nXGbbAuRule_eiOfz4b9Qx3EAA; SIDCC=AKEyXzWRCEV69aK0KLzMAmtzZfiWnparhRDa26UigZAW4NWpFJgFkDiX6-AQOx6qYE6jh_z39JU; __Secure-1PSIDCC=AKEyXzUYB7s1o-EogypAZjot4bre5HGtVzEW2pWmgOEBrVfTCwYB9M1uKcPn3_7xDeDV0GcpSUQ; __Secure-3PSIDCC=AKEyXzUamjhQdEU-P9eQb_0_cxPGUKYf2Pn4IdsNyQnKkKcJEJaAifzkEz6hhPCT2Rik3MEzp0A',
+  'accept': 'application/json',
+  'origin': 'https://www.youtube.com',
+  'accept-language': 'en-US,en;q=0.5',
+  'content-type': 'application/json',
+};
+
 
   /// For any custom YoutubeHttpClient to override headers easily
   Map<String, String> get headers => defaultHeaders;
@@ -344,22 +345,28 @@ class YoutubeHttpClient extends http.BaseClient {
   //      .writeAsStringSync('${StackTrace.current}\n$str');
   //}
 
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    if (_closed) throw HttpClientClosedException();
+ @override
+Future<http.StreamedResponse> send(http.BaseRequest request) async {
+  if (_closed) throw HttpClientClosedException();
 
-    // Apply default headers if they are not already present
-    headers.forEach((key, value) {
-      if (request.headers[key] == null) {
-        request.headers[key] = headers[key]!;
-      }
-    });
+  // Print the target URL
+  print('🌍 Sending request to: ${request.url}');
 
-    _logger.fine('Sending request: $request', null, StackTrace.current);
-    _logger.finer('Request headers: ${request.headers}');
-    if (request is http.Request) {
-      _logger.finer('Request body: ${request.body}');
-    }
-    return _httpClient.send(request);
+  // Apply default headers only if not present
+  headers.forEach((key, value) {
+    request.headers.putIfAbsent(key, () => value);
+  });
+
+  // Print out ALL final headers being sent
+  print('📦 Final headers:');
+  request.headers.forEach((k, v) => print('  $k: $v'));
+
+  // Print the request body if available
+  if (request is http.Request && request.body.isNotEmpty) {
+    print('📨 Request body: ${request.body}');
   }
+
+  return _httpClient.send(request);
+}
+
 }
